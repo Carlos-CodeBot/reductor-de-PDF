@@ -1,0 +1,77 @@
+# Compress PDF — README
+
+Pequeño script en Python que reduce el tamaño de un PDF de forma local (sin subirlo a la nube) usando **Ghostscript**.  
+Pensado para Windows 11, pero funciona en cualquier sistema donde haya Python 3 y Ghostscript.
+
+---
+
+## 1. Prerrequisitos
+
+| Herramienta      | Versión mínima | Instalación                                                                                               |
+|------------------|---------------|-----------------------------------------------------------------------------------------------------------|
+| **Python**       | 3.8 o superior| https://www.python.org/downloads/windows/                                                              |
+| **Ghostscript**  | 10.x (64-bit) | 1) Descarga “Ghostscript for Windows (64 bit)” desde https://ghostscript.com/.\n2) Instálalo aceptando la ubicación por defecto (`C:\Program Files\gs\…`). |
+
+> **Atajos**  
+> • Confirma que Python esté en tu *PATH* con `python --version`.  
+> • Tras instalar Ghostscript, abre PowerShell y teclea `gswin64c -h`; si aparece la ayuda, ya está en el *PATH*.  
+> • Si no, edita la constante `GS_PATH` dentro del script y pon la ruta completa a `gswin64c.exe`.
+
+---
+
+## 2. Descarga del script
+
+```powershell
+git clone https://github.com/tu-usuario/compress_pdf.git
+cd compress_pdf
+```
+
+(o simplemente descarga **`compress_pdf.py`** y colócalo en la misma carpeta que tu PDF).
+
+---
+
+## 3. Uso básico
+
+```powershell
+python compress_pdf.py "Informe confidencial.pdf"
+```
+
+El script:
+
+1. Crea copias comprimidas con distintos presets (`/printer`, `/ebook`, `/screen`).  
+2. Se detiene cuando la primera versión quede **≤ 50 MB**.  
+3. Guarda el resultado como `Informe confidencial_compressed.pdf` en la misma carpeta.
+
+---
+
+### Opciones
+
+| Opción              | Descripción                       | Ejemplo                         |
+|---------------------|-----------------------------------|---------------------------------|
+| `-o, --output`      | Nombre del PDF resultante.        | `-o "Informe_v2.pdf"`           |
+| `-t, --target`      | Límite de tamaño en MB (por defecto **50**). | `-t 45`                         |
+
+```powershell
+# Cambiar nombre de salida y límite de 45 MB
+python compress_pdf.py "Informe.pdf" -o "Informe_v2.pdf" -t 45
+```
+
+---
+
+## 4. Preguntas frecuentes
+
+| Problema                                           | Solución |
+|----------------------------------------------------|----------|
+| **“'gswin64c' no se reconoce…”**                   | Añade la carpeta `…\gs\gs10.xx\bin` a tu variable de entorno **PATH**, o ajusta `GS_PATH` en el script con la ruta completa. |
+| **El PDF sigue pesando más de lo deseado**         | 1) Edita `PDF_SETTINGS` y prueba presets más agresivos (`/screen` + `-dColorImageResolution=120`).\n2) Baja manualmente la resolución de imágenes en un editor previo. |
+| **¿Se altera el contenido?**                       | Ghostscript solo recodifica imágenes y comprime streams; texto y objetos vectoriales se mantienen intactos. Aun así, abre la versión comprimida y revisa la legibilidad. |
+
+---
+
+## 5. Licencia
+
+Publicado bajo la MIT License (LICENSE).
+
+---
+
+¡Listo! Clona el repo, instala Ghostscript y optimiza tus PDF sin exponer información confidencial fuera de tu equipo.
